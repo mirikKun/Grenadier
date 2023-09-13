@@ -24,7 +24,6 @@ public class Explosion : MonoBehaviour
         foreach (var particleSystem in particleSystems)
         {
             particleSystem.Play();
-            Debug.Log(3333333);
         }
     }
 

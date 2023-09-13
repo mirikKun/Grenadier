@@ -69,7 +69,9 @@ public class Projectile : MonoBehaviour
         {
             if (_reflectionsCurCount < _reflectionsMaxCount)
             {
-                Vector3 newSpeed = Vector3.Reflect(_curSpeed, hit.normal);
+                float bounciness = hit.collider.material.bounciness;
+
+                Vector3 newSpeed = Vector3.Reflect(_curSpeed, hit.normal)*bounciness;
                 Reflect(newSpeed);
                 _reflectionsCurCount++;
             }
