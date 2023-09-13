@@ -1,18 +1,43 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Explosion : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private int lifeTime;
+    [SerializeField] private ParticleSystem[] particleSystems;
+    private float _progress;
+    private Transform _transform;
+    public event Action<Explosion> OnExplosionEnded;
+
+    private void Awake()
     {
-        
+        _transform = transform;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void PlaceExplosion(Vector3 position, Vector3 normal)
     {
-        
+        _transform.position = position;
+        _transform.up = normal;
+        _progress = 0;
+        foreach (var particleSystem in particleSystems)
+        {
+            particleSystem.Play();
+            Debug.Log(3333333);
+        }
+    }
+
+    public bool GameUpdate()
+    {
+        _progress += Time.deltaTime;
+        if (_progress >= lifeTime)
+        {
+            OnExplosionEnded?.Invoke(this);
+            return false;
+
+        }
+
+        return true;
     }
 }

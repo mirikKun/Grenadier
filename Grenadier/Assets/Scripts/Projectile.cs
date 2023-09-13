@@ -5,60 +5,115 @@ using UnityEngine.Serialization;
 public class Projectile : MonoBehaviour
 {
     [SerializeField] private float lifeLenght = 5;
+    [SerializeField] private Explosion explosionPrefab;
     [SerializeField] private float collisionDetectionLenght = 0.3f;
+    private int _reflectionsMaxCount = 5;
+    private ExplosionsPool _pool;
     private Vector3 _startSpeed;
     private Vector3 _curSpeed;
     private Vector3 _startPoint;
     private Transform _transform;
-    private float _time;
+    private float _flyTime;
+    private float _totalTime;
     private const float g = 9.81f;
     private const int ObstacleLayerMask = 1 << 9;
-    [SerializeField] private int reflectionsMaxCount = 5;
-    private int _reflectionsCurCount = 0;
+    private int _reflectionsCurCount;
+    public event Action<Projectile> OnProjectileEnd;
 
-
-    public void SetupProjectile(Vector3 startSpeed, Vector3 startPoint)
+    private void Awake()
     {
-        _reflectionsCurCount = 0;
         _transform = transform;
+    }
+
+    public void SetExplosionsPool(ExplosionsPool pool)
+    {
+        _pool = pool;
+    }
+
+    public void SetupProjectile(Vector3 startSpeed, Vector3 startPoint, int reflectionsCount)
+    {
+        _flyTime = 0;
+        _totalTime = 0;
+        _reflectionsMaxCount = reflectionsCount;
+        _reflectionsCurCount = 0;
         _startSpeed = startSpeed;
         _curSpeed = startSpeed;
         _startPoint = startPoint;
         _transform.position = startPoint;
-        Destroy(gameObject, lifeLenght);
     }
 
-    private void Update()
+    public bool GameUpdate()
     {
-        _time += Time.deltaTime;
+        _flyTime += Time.deltaTime;
+        _totalTime += Time.deltaTime;
         UpdatePosition();
-        if (_reflectionsCurCount < reflectionsMaxCount)
+        if (!CheckOnCollision() || !CheckOnLifeTime())
         {
-            CheckOnCollision();
+            return false;
         }
+        return true;
+
     }
 
     private void UpdatePosition()
     {
-        Vector3 newPoint = _startPoint + _startSpeed * _time;
-        newPoint.y = _startPoint.y + _startSpeed.y * _time - g * _time * _time / 2;
+        Vector3 newPoint = _startPoint + _startSpeed * _flyTime;
+        newPoint.y = _startPoint.y + _startSpeed.y * _flyTime - g * _flyTime * _flyTime / 2;
         _transform.position = newPoint;
     }
 
-    private void CheckOnCollision()
+    private bool CheckOnCollision()
     {
-        _curSpeed.y = _startSpeed.y - g * _time;
+        _curSpeed.y = _startSpeed.y - g * _flyTime;
         if (Physics.Raycast(transform.position, _curSpeed, out var hit, collisionDetectionLenght, ObstacleLayerMask))
         {
-            Vector3 newSpeed = Vector3.Reflect(_curSpeed, hit.normal);
-            Reflect(newSpeed);
-            _reflectionsCurCount++;
+            if (_reflectionsCurCount < _reflectionsMaxCount)
+            {
+                Vector3 newSpeed = Vector3.Reflect(_curSpeed, hit.normal);
+                Reflect(newSpeed);
+                _reflectionsCurCount++;
+            }
+            else
+            {
+                Debug.Log("ssssss");
+                BlowUp(hit);
+                return false;
+
+            }
         }
+        return true;
+
     }
-    
+
+    private bool CheckOnLifeTime()
+    {
+        if (_totalTime > lifeLenght)
+        {
+            BlowUp();
+            return false;
+
+        }
+
+        return true;
+    }
+
+    private void BlowUp(RaycastHit hit)
+    {
+        Explosion explosion = _pool.GetElement();
+        explosion.PlaceExplosion(hit.point,hit.normal);
+        OnProjectileEnd?.Invoke(this);
+    }
+    private void BlowUp()
+    {
+        Explosion explosion = _pool.GetElement();
+        explosion.PlaceExplosion(_transform.position,Vector3.up);
+        OnProjectileEnd?.Invoke(this);
+
+    }
+
     private void Reflect(Vector3 newSpeed)
     {
-        _time = 0;
+        _flyTime = 0;
         _startSpeed = newSpeed;
         _curSpeed = newSpeed;
         _startPoint = _transform.position;

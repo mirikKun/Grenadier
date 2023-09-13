@@ -16,7 +16,7 @@ public class GrenadeMover : MonoBehaviour
     private float _xRotation;
     private float _yRotation;
 
-    private void Update()
+    public void GameUpdate()
     {
         float mouseX = Input.GetAxis("Mouse X") * Time.deltaTime * sensitivityX;
         float mouseY = Input.GetAxis("Mouse Y") * Time.deltaTime * sensitivityY;
