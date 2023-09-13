@@ -15,7 +15,6 @@
             trajectoryDrawer.Draw(power);
             if (Input.GetButtonDown("Fire1"))
             {
-                Debug.Log("aaaa");
                 Projectile newProjectile = projectileGenerator.GenerateProjectile();
                 newProjectile.SetupProjectile(-muzzle.up*power,launchPoint.position);
             }
