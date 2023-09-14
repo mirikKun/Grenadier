@@ -5,7 +5,6 @@ using UnityEngine.Serialization;
 public class Projectile : MonoBehaviour
 {
     [SerializeField] private float lifeLenght = 5;
-    [SerializeField] private Explosion explosionPrefab;
     [SerializeField] private float collisionDetectionLenght = 0.3f;
     private int _reflectionsMaxCount = 5;
     private ExplosionsPool _pool;
@@ -103,6 +102,7 @@ public class Projectile : MonoBehaviour
     {
         Explosion explosion = _pool.GetElement();
         explosion.PlaceExplosion(hit.point,hit.normal);
+        _pool.GetMarkCreator.CreateMark(hit.point,hit.normal);
         OnProjectileEnd?.Invoke(this);
     }
     private void BlowUp()

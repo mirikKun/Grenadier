@@ -4,7 +4,8 @@ using UnityEngine;
 public class ExplosionsPool : SimpleObjectPool<Explosion>
 {
     [SerializeField] private Explosion prefab;
-
+    [SerializeField] private ExplosionMarkCreator explosionMarkCreator;
+    public ExplosionMarkCreator GetMarkCreator => explosionMarkCreator;
     protected override void GenerateNewElement()
     {
         if (prefab == null)

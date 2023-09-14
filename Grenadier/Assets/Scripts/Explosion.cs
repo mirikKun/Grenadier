@@ -6,11 +6,12 @@ using UnityEngine;
 public class Explosion : MonoBehaviour
 {
     [SerializeField] private int lifeTime;
+    [SerializeField] private Transform explosion;
     [SerializeField] private ParticleSystem[] particleSystems;
     private float _progress;
     private Transform _transform;
     public event Action<Explosion> OnExplosionEnded;
-
+    
     private void Awake()
     {
         _transform = transform;
