@@ -37,7 +37,7 @@
 
         private void ChangeNumber(float number)
         {
-            powerNumber.text = (Mathf.CeilToInt(number)).ToString();
+            powerNumber.text = ((int)number).ToString();
         }
 
         public void SetupStartValues(float power,int bouncesCount)

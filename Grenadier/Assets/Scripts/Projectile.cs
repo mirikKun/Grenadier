@@ -76,7 +76,6 @@ public class Projectile : MonoBehaviour
             }
             else
             {
-                Debug.Log("ssssss");
                 BlowUp(hit);
                 return false;
 
@@ -102,7 +101,15 @@ public class Projectile : MonoBehaviour
     {
         Explosion explosion = _pool.GetElement();
         explosion.PlaceExplosion(hit.point,hit.normal);
-        _pool.GetMarkCreator.CreateMark(hit.point,hit.normal);
+        //simple Instantiate
+        //_pool.GetMarkCreator.CreateMark(hit.point,hit.normal);
+        
+        //RenderTexture
+        var wall = hit.transform.GetComponent<Target>();
+        if (wall)
+        {
+            wall.AddPoint(hit.textureCoord);
+        }
         OnProjectileEnd?.Invoke(this);
     }
     private void BlowUp()
