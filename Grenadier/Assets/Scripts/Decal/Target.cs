@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Vector3 = System.Numerics.Vector3;
 
 public class Target : MonoBehaviour
 {
@@ -57,19 +54,26 @@ public class Target : MonoBehaviour
         _texture.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0, false);
         foreach (var point in _points)
         {
-            Color[] stampColors = new Color[stampTexture.width * stampTexture.height];
+            int xLeft = Mathf.Clamp(point.x - GetStampHalfSize, 0, renderTexture.width);
+            int xRight = Mathf.Clamp(point.x + GetStampHalfSize, 0, renderTexture.width);
+            int yDown = Mathf.Clamp(point.y - GetStampHalfSize, 0, renderTexture.height);
+            int yTop = Mathf.Clamp(point.y + GetStampHalfSize, 0, renderTexture.height);
+            
+            int width = xRight - xLeft;
+            int height = yTop - yDown;
+            
+            Color[] stampColors = new Color[(width) * (height)];
 
-            for (int i = 0; i < stampTexture.width; i++)
-            for (int j = 0; j < stampTexture.height; j++)
+            for (int i = 0; i < width; i++)
+            for (int j = 0; j < height; j++)
             {
                 int x = point.x - GetStampHalfSize + i;
                 int y = point.y - GetStampHalfSize + j;
                 float t = stampTexture.GetPixel(i, j).a;
-                stampColors[j * stampTexture.width + i] = (1 - t) * _texture.GetPixel(x,y);
+                stampColors[j * width + i] = (1 - t) * _texture.GetPixel(x, y);
             }
 
-            _texture.SetPixels(point.x - GetStampHalfSize, point.y - GetStampHalfSize, stampTexture.width,
-                stampTexture.height, stampColors);
+            _texture.SetPixels(xLeft, yDown, width, height, stampColors);
         }
 
         _texture.Apply();

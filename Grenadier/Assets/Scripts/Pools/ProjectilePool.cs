@@ -1,11 +1,11 @@
-
 using UnityEngine;
 
 [RequireComponent(typeof(ProjectileGenerator))]
 public class ProjectilePool : SimpleObjectPool<Projectile>
 {
-    private ProjectileGenerator _projectileGenerator;
     [SerializeField] private ExplosionsPool explosionPool;
+    private ProjectileGenerator _projectileGenerator;
+
     private void Awake()
     {
         _projectileGenerator = GetComponent<ProjectileGenerator>();
@@ -19,6 +19,5 @@ public class ProjectilePool : SimpleObjectPool<Projectile>
         newElement.SetExplosionsPool(explosionPool);
         newElement.OnProjectileEnd += RevertToPool;
         _elements.Add(newElement);
-
     }
 }

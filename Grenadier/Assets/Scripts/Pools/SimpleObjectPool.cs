@@ -2,27 +2,22 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class SimpleObjectPool<T>:MonoBehaviour  where T : MonoBehaviour
+public class SimpleObjectPool<T> : MonoBehaviour where T : MonoBehaviour
 {
-
-     private T elementPrefab ;
-
     private int _initialPoolSize = 3;
-
     private int _maxPoolSize = 10;
-
-
+    private List<T> _activeElements = new List<T>();
     protected readonly List<T> _elements = new List<T>();
-    private List<T> _activeElements=new List<T>();
-    
+
 
     protected virtual void GenerateNewElement()
     {
     }
 
     public List<T> GetActiveElements => _activeElements;
+
     public void SetupPool(int maxCount)
-    {   
+    {
         _maxPoolSize = maxCount;
         for (int i = 0; i < _initialPoolSize; i++)
         {
@@ -36,6 +31,7 @@ public class SimpleObjectPool<T>:MonoBehaviour  where T : MonoBehaviour
         {
             element.gameObject.SetActive(false);
         }
+
         _activeElements.Clear();
     }
 
@@ -44,6 +40,7 @@ public class SimpleObjectPool<T>:MonoBehaviour  where T : MonoBehaviour
         element.gameObject.SetActive(false);
         _activeElements.Remove(element);
     }
+
     public T GetElement()
     {
         foreach (T destination in _elements)
@@ -60,7 +57,7 @@ public class SimpleObjectPool<T>:MonoBehaviour  where T : MonoBehaviour
         if (_elements.Count < _maxPoolSize)
         {
             GenerateNewElement();
-            T lastDestination = _elements[_elements.Count-1];
+            T lastDestination = _elements[_elements.Count - 1];
 
             lastDestination.gameObject.SetActive(true);
             _activeElements.Add(lastDestination);

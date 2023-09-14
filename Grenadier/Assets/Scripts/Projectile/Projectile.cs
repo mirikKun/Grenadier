@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class Projectile : MonoBehaviour
 {
@@ -50,8 +49,8 @@ public class Projectile : MonoBehaviour
         {
             return false;
         }
-        return true;
 
+        return true;
     }
 
     private void UpdatePosition()
@@ -70,7 +69,7 @@ public class Projectile : MonoBehaviour
             {
                 float bounciness = hit.collider.material.bounciness;
 
-                Vector3 newSpeed = Vector3.Reflect(_curSpeed, hit.normal)*bounciness;
+                Vector3 newSpeed = Vector3.Reflect(_curSpeed, hit.normal) * bounciness;
                 Reflect(newSpeed);
                 _reflectionsCurCount++;
             }
@@ -78,11 +77,10 @@ public class Projectile : MonoBehaviour
             {
                 BlowUp(hit);
                 return false;
-
             }
         }
-        return true;
 
+        return true;
     }
 
     private bool CheckOnLifeTime()
@@ -91,7 +89,6 @@ public class Projectile : MonoBehaviour
         {
             BlowUp();
             return false;
-
         }
 
         return true;
@@ -100,24 +97,25 @@ public class Projectile : MonoBehaviour
     private void BlowUp(RaycastHit hit)
     {
         Explosion explosion = _pool.GetElement();
-        explosion.PlaceExplosion(hit.point,hit.normal);
+        explosion.PlaceExplosion(hit.point, hit.normal);
         //simple Instantiate
         //_pool.GetMarkCreator.CreateMark(hit.point,hit.normal);
-        
+
         //RenderTexture
         var wall = hit.transform.GetComponent<Target>();
         if (wall)
         {
             wall.AddPoint(hit.textureCoord);
         }
+
         OnProjectileEnd?.Invoke(this);
     }
+
     private void BlowUp()
     {
         Explosion explosion = _pool.GetElement();
-        explosion.PlaceExplosion(_transform.position,Vector3.up);
+        explosion.PlaceExplosion(_transform.position, Vector3.up);
         OnProjectileEnd?.Invoke(this);
-
     }
 
     private void Reflect(Vector3 newSpeed)

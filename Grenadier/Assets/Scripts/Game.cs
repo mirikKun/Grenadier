@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Game : MonoBehaviour
@@ -11,11 +8,15 @@ public class Game : MonoBehaviour
     [SerializeField] private ProjectilePool projectilesPool;
     [SerializeField] private ExplosionsPool explosionsPool;
     private bool _gameRunning = false;
+    private int _maxProjectiles = 10;
+    private int _maxExplosions = 10;
 
     private void Start()
     {
         uiStateSwitch.StartBehaviour();
         gunShooter.StartBehaviour();
+        projectilesPool.SetupPool(_maxProjectiles);
+        explosionsPool.SetupPool(_maxExplosions);
     }
 
     private void OnEnable()

@@ -1,5 +1,3 @@
-using System;
-using UnityEditor;
 using UnityEngine;
 
 public class TrajectoryDrawer : MonoBehaviour
@@ -22,8 +20,8 @@ public class TrajectoryDrawer : MonoBehaviour
         {
             float timeStep = i * timeBetween;
             Vector3 newPoint = launchPoint + startSpeed * timeStep;
-            newPoint.y =launchPoint.y+ startSpeed.y * timeStep - g * timeStep * timeStep / 2;
-            lineRenderer.SetPosition(i,newPoint);
+            newPoint.y = launchPoint.y + startSpeed.y * timeStep - g * timeStep * timeStep / 2;
+            lineRenderer.SetPosition(i, newPoint);
         }
     }
 }

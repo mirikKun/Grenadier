@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ProjectileGenerator : MonoBehaviour
@@ -59,8 +57,8 @@ public class ProjectileGenerator : MonoBehaviour
     {
         Vector3[] vertices = new Vector3[6 * 4];
 
-        Vector3[] randomVertices=GetRandomVertices();
-        
+        Vector3[] randomVertices = GetRandomVertices();
+
         // Down face
         vertices[0] = randomVertices[0];
         vertices[1] = randomVertices[1];

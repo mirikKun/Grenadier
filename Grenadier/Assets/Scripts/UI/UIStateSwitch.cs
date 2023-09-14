@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UIStateSwitch : MonoBehaviour
@@ -11,7 +9,7 @@ public class UIStateSwitch : MonoBehaviour
     public event Action OnContinueGame;
     private bool _menuOpened;
     private bool _startPanelOpened;
-    
+
     public void StartBehaviour()
     {
         _startPanelOpened = true;
@@ -19,7 +17,7 @@ public class UIStateSwitch : MonoBehaviour
         startPanel.SetActive(true);
         EnableCursor();
     }
-    
+
     public void CloseStartPanel()
     {
         _startPanelOpened = false;
@@ -27,7 +25,7 @@ public class UIStateSwitch : MonoBehaviour
         DisableCursor();
         OnContinueGame?.Invoke();
     }
-    
+
     private void OpenMenu()
     {
         settingsMenu.SetActive(true);
@@ -42,7 +40,6 @@ public class UIStateSwitch : MonoBehaviour
         _menuOpened = false;
         DisableCursor();
         OnContinueGame?.Invoke();
-
     }
 
     private void Update()
@@ -51,6 +48,7 @@ public class UIStateSwitch : MonoBehaviour
         {
             return;
         }
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (_menuOpened)

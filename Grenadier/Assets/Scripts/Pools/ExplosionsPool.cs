@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class ExplosionsPool : SimpleObjectPool<Explosion>
@@ -6,6 +5,7 @@ public class ExplosionsPool : SimpleObjectPool<Explosion>
     [SerializeField] private Explosion prefab;
     [SerializeField] private ExplosionMarkCreator explosionMarkCreator;
     public ExplosionMarkCreator GetMarkCreator => explosionMarkCreator;
+
     protected override void GenerateNewElement()
     {
         if (prefab == null)
@@ -17,7 +17,6 @@ public class ExplosionsPool : SimpleObjectPool<Explosion>
         newElements.gameObject.SetActive(false);
         newElements.OnExplosionEnded += RevertToPool;
         _elements.Add(newElements);
-
     }
 
     private void OnDestroy()
