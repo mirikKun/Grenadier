@@ -9,7 +9,8 @@ public class Target : MonoBehaviour
 
     [SerializeField] private Vector2Int position = new Vector2Int(1024, 1024);
     [SerializeField] private Color backColor = Color.white;
-    private List<Vector2Int> _points = new List<Vector2Int>();
+    [SerializeField] private int maxStampsCount=20;
+    private Queue<Vector2Int> _points = new Queue<Vector2Int>();
     private Texture2D _texture;
     private int GetStampHalfSize => stampTexture.width / 2;
 
@@ -43,7 +44,11 @@ public class Target : MonoBehaviour
     {
         Vector2Int intVector =
             new Vector2Int((int)(vector2.x * renderTexture.width), (int)(vector2.y * renderTexture.width));
-        _points.Add(intVector);
+        if (_points.Count > maxStampsCount)
+        {
+            _points.Dequeue();
+        }
+        _points.Enqueue(intVector);
         Rerender();
     }
 
@@ -52,6 +57,7 @@ public class Target : MonoBehaviour
         RenderTexture.active = renderTexture;
 
         _texture.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0, false);
+        
         foreach (var point in _points)
         {
             int xLeft = Mathf.Clamp(point.x - GetStampHalfSize, 0, renderTexture.width);

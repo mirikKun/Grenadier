@@ -29,6 +29,7 @@ public class UISettings : MonoBehaviour
         powerSlider.maxValue = minMaxPower.y;
     }
 
+
     private void OnDisable()
     {
         powerSlider.onValueChanged.RemoveListener(ChangeNumber);

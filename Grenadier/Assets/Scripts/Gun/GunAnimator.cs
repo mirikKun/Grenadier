@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GunAnimator : MonoBehaviour
 {
@@ -7,6 +9,7 @@ public class GunAnimator : MonoBehaviour
     [SerializeField] private float shakingAmplitude;
     [SerializeField] private float shakingSpeed;
     private float _shakingProgress;
+    private Vector3 _startMuzzleLocation;
 
     [Header("Recoil")] [SerializeField] private Transform muzzle;
     [SerializeField] private float recoilAmplitude;
@@ -15,6 +18,13 @@ public class GunAnimator : MonoBehaviour
     private float _muzzleOffset;
     private Vector3 _direction = Vector3.up;
     private float _recoilProgress;
+    private Vector3 _startCameraLocation;
+
+    private void Start()
+    {
+        _startMuzzleLocation = muzzle.localPosition;
+            _startCameraLocation = camera.localPosition;
+    }
 
     public void StopAnimations()
     {
@@ -34,7 +44,7 @@ public class GunAnimator : MonoBehaviour
     private IEnumerator CameraShaking()
     {
         _shakingProgress = 0;
-        Vector3 initialPos = camera.localPosition;
+        Vector3 initialPos = _startCameraLocation;
         Vector3 newPosition = initialPos + Random.insideUnitSphere * shakingAmplitude;
         camera.localPosition = newPosition;
 
@@ -54,7 +64,7 @@ public class GunAnimator : MonoBehaviour
 
     private IEnumerator MuzzleRecoil()
     {
-        _startMuzzlePosition = muzzle.localPosition;
+        _startMuzzlePosition = _startMuzzleLocation;
         _recoilProgress = 0;
         _muzzleOffset = 0;
         while (_recoilProgress < 1)

@@ -8,8 +8,8 @@ public class Game : MonoBehaviour
     [SerializeField] private ProjectilePool projectilesPool;
     [SerializeField] private ExplosionsPool explosionsPool;
     private bool _gameRunning = false;
-    private int _maxProjectiles = 10;
-    private int _maxExplosions = 10;
+    private int _maxProjectiles = 40;
+    private int _maxExplosions = 40;
 
     private void Start()
     {

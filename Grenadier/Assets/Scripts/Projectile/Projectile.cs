@@ -96,6 +96,9 @@ public class Projectile : MonoBehaviour
 
     private void BlowUp(RaycastHit hit)
     {
+        Debug.Log(hit);
+        Debug.Log(hit.point);
+        Debug.Log(hit.normal);
         Explosion explosion = _pool.GetElement();
         explosion.PlaceExplosion(hit.point, hit.normal);
         //simple Instantiate
